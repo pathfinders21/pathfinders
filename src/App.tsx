@@ -20,7 +20,9 @@ import { RoadmapWorkspace } from './components/RoadmapWorkspace.tsx';
 import { MatchPanel } from './components/MatchPanel.tsx';
 import { StudentWorkspace } from './components/StudentWorkspace.tsx';
 import { MentorInbox } from './components/MentorInbox.tsx';
+import { AssistantDock } from './components/AssistantDock.tsx';
 import { useSession } from './lib/session.ts';
+import { ApiError, api, type AssistantMentor } from './lib/api.ts';
 import { INITIAL_MENTORS, INITIAL_REQUESTS, INITIAL_ROADMAP } from './data/mockMentors.ts';
 import { INITIAL_PROBLEMS } from './data/mockCommunityProblems.ts';
 import { UserProfile, Mentor, MentorshipRequest, CareerRoadmap, CommunityProblem } from './types.ts';
@@ -340,6 +342,35 @@ export default function App() {
     addToast('info', 'Answer deleted', 'It is gone from this browser. Nothing was sent to a server.');
   };
 
+  /**
+   * A mentorship request started from the assistant's answer.
+   *
+   * The mentor id comes from the matching engine, so the request the mentor receives
+   * carries the same fit score they would have seen on the mentors screen. Signed out,
+   * there is no account to store it against, so it sends the visitor to sign in instead
+   * of pretending a request was made.
+   */
+  const handleAssistantRequestMentor = async (mentor: AssistantMentor, topic: string) => {
+    if (!live) {
+      addToast('info', 'Sign in to request mentorship', 'Requests are stored against your account, so they need a session.');
+      setAuthModalOpen(true);
+      return;
+    }
+    try {
+      await api.createRequest({
+        mentorId: mentor.id,
+        message: topic ? `Asked the assistant about: ${topic}` : '',
+      });
+      addToast('success', `Request sent to ${mentor.name}`, 'It is stored as pending until they answer. Nothing is emailed.');
+    } catch (error) {
+      addToast(
+        'error',
+        'That request did not go through',
+        error instanceof ApiError ? error.userMessage : 'Try again in a moment.'
+      );
+    }
+  };
+
   const handleMarkProblemSolved = (problemId: string) => {
     setProblems((prev) =>
       prev.map((prob) => {
@@ -635,6 +666,16 @@ export default function App() {
         onRequestMentorship={handleRequestMentorship}
         user={user}
         onRequireAuth={() => setAuthModalOpen(true)}
+      />
+
+      {/* The assistant: a question in, an answer and the mentors who fit it out. */}
+      <AssistantDock
+        session={session}
+        onRequestMentor={handleAssistantRequestMentor}
+        onBrowseMentors={() => {
+          setCurrentTab('mentors');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
       />
 
       {/* Multimedia Chat Drawer with Video, Photos & Voice Notes */}
