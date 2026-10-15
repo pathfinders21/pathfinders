@@ -73,7 +73,7 @@ export const LandingSections: React.FC<LandingSectionsProps> = ({
             </div>
             <h3 className="text-xl font-medium text-white mb-2">Artifact First Sessions</h3>
             <p className="text-xs sm:text-sm text-white/60 leading-relaxed mb-6">
-              No generic pep-talks. Inspect architecture diagrams, conduct live mock design reviews, and receive actionable promotion rubrics.
+              No generic pep talks. Inspect architecture diagrams, conduct live mock design reviews, and receive actionable promotion rubrics.
             </p>
             <div className="text-xs text-white/40 flex items-center gap-2">
               <Check className="w-3.5 h-3.5 text-emerald-400" />

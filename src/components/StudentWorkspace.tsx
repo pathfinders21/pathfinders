@@ -482,7 +482,7 @@ export const StudentWorkspace: React.FC<Props> = ({
           <Panel title="Weekly hours you entered">
             <p className="text-sm text-white/80">
               {data.profile?.hoursPerWeek
-                ? `${data.profile.hoursPerWeek} — roadmaps are sized against this.`
+                ? `${data.profile.hoursPerWeek}, and roadmaps are sized against this.`
                 : 'Not set. Add it on your profile so plans are sized against it.'}
             </p>
           </Panel>

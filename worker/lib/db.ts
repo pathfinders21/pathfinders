@@ -389,12 +389,12 @@ type MentorSeed = Omit<MentorRecord, 'embedding'> & { embedding?: number[] }
 export const MENTOR_SEED: MentorSeed[] = [
   {
     id: 'm-01', name: 'Aarav Mehta', initials: 'AM', year: 'Final year · Computer Science',
-    tagline: 'Backend intern turned SDE-1 offer. Happy to talk systems and internship loops.',
+    tagline: 'Backend intern turned offer for a junior SDE role. Happy to talk systems and internship loops.',
     skills: ['Distributed systems', 'Databases', 'Data structures'],
     goals: ['internship', 'placement', 'projects'], careers: ['swe'],
     sessions: 42, yearsAhead: 3, rating: 4.9, days: ['Tue', 'Thu', 'Sat'],
     availabilityWindow: 'Tue & Thu · 6 to 9 PM',
-    vibeTags: ['structured', 'direct', 'systems-first'],
+    vibeTags: ['structured', 'direct', 'systems first'],
     vibeBlurb: 'Direct and methodical: hands you a checklist and expects you to bring attempts, not questions.',
   },
   {
@@ -429,23 +429,23 @@ export const MENTOR_SEED: MentorSeed[] = [
   },
   {
     id: 'm-05', name: 'Rohan Bhatt', initials: 'RB', year: 'Third year · Electrical Engineering',
-    tagline: 'Switched into ML from a non-CS branch. Ask me about that jump.',
+    tagline: 'Switched into ML from a branch outside computer science. Ask me about that jump.',
     skills: ['Machine learning', 'Databases', 'Technical writing'],
     goals: ['research', 'projects', 'grades'], careers: ['ml', 'research'],
     sessions: 12, yearsAhead: 2, rating: 4.6, days: ['Wed', 'Fri', 'Sun'],
     availabilityWindow: 'Wed & Fri · 6 to 9 PM',
-    vibeTags: ['empathetic', 'motivating', 'career-changer'],
+    vibeTags: ['empathetic', 'motivating', 'career changer'],
     vibeBlurb: 'An empathetic motivator who made a big switch himself and remembers how it felt.',
   },
   {
     id: 'm-06', name: 'Ishita Rao', initials: 'IR', year: 'Final year · Computer Science',
-    tagline: 'Open-source maintainer. I will get you from tutorial to a merged PR.',
+    tagline: 'Open source maintainer. I will get you from tutorial to a merged PR.',
     skills: ['Frontend', 'Distributed systems', 'Technical writing'],
     goals: ['projects', 'internship', 'research'], careers: ['swe', 'product'],
     sessions: 51, yearsAhead: 3, rating: 5.0, days: ['Tue', 'Fri', 'Sat'],
     availabilityWindow: 'Tue & Fri · 6 to 9 PM',
-    vibeTags: ['hands-on', 'fast-paced', 'open-source'],
-    vibeBlurb: 'Hands-on and fast-paced; prefers pairing on a real issue over abstract advice.',
+    vibeTags: ['hands on', 'fast paced', 'open source'],
+    vibeBlurb: 'Hands on and fast paced; prefers pairing on a real issue over abstract advice.',
   },
   {
     id: 'm-07', name: 'Kabir Shah', initials: 'KS', year: 'Fourth year · Computer Science',
@@ -454,8 +454,8 @@ export const MENTOR_SEED: MentorSeed[] = [
     goals: ['grades', 'placement', 'internship'], careers: ['swe'],
     sessions: 23, yearsAhead: 3, rating: 4.7, days: ['Mon', 'Tue', 'Thu'],
     availabilityWindow: 'Mon & Tue · 6 to 9 PM',
-    vibeTags: ['resilient', 'practical', 'no-nonsense'],
-    vibeBlurb: 'Practical and no-nonsense; treats a failed attempt as data rather than a verdict.',
+    vibeTags: ['resilient', 'practical', 'no nonsense'],
+    vibeBlurb: 'Practical and no nonsense; treats a failed attempt as data rather than a verdict.',
   },
   {
     id: 'm-08', name: 'Meera Krishnan', initials: 'MK', year: 'Final year · Information Systems',
@@ -475,7 +475,7 @@ export const MENTOR_SEED: MentorSeed[] = [
     sessions: 9, yearsAhead: 2, rating: 4.6, days: ['Mon', 'Wed', 'Sat'],
     availabilityWindow: 'Mon & Wed · 6 to 9 PM',
     vibeTags: ['peer', 'collaborative', 'curious'],
-    vibeBlurb: 'A near-peer collaborator; happier figuring the problem out alongside you than lecturing.',
+    vibeBlurb: 'A near peer collaborator; happier figuring the problem out alongside you than lecturing.',
   },
 ]
 

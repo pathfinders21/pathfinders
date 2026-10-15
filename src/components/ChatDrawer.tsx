@@ -515,7 +515,7 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
               <div className="flex items-center gap-2">
                 <h3 className="text-sm font-medium text-white truncate">{recipientName}</h3>
                 <span className="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Channel #{channelId.slice(-4)}
+                  Channel #{channelId.replace(/[^a-zA-Z0-9]/g, '').slice(-4)}
                 </span>
               </div>
               <div className="text-xs text-white/50 truncate">{recipientRole}</div>

@@ -240,7 +240,7 @@ describe('StudentWorkspace', () => {
     expect(screen.getByText(/Added to your roadmap/)).toBeTruthy();
     expect(screen.getByText(/Covers Kafka/)).toBeTruthy();
     expect(screen.getByText(/Database indexing/)).toBeTruthy();
-    expect(screen.getByText(/6 — roadmaps are sized against this/)).toBeTruthy();
+    expect(screen.getByText(/6, and roadmaps are sized against this/)).toBeTruthy();
   });
 
   it('names the sections it could not load instead of filling them in', async () => {

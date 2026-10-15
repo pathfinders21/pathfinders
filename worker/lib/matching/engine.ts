@@ -34,7 +34,7 @@ export const MATCH_WEIGHTS = {
 export type FactorKey = keyof typeof MATCH_WEIGHTS
 
 export const FACTOR_LABELS: Record<FactorKey, string> = {
-  goal: 'Career-goal alignment',
+  goal: 'Career goal alignment',
   skills: 'Skills & learning needs',
   expertise: 'Mentor expertise',
   interests: 'Interests & mentoring preferences',

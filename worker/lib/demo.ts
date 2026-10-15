@@ -47,7 +47,7 @@ const DEMO_ANALYSES: VisionAnalysis[] = [
   {
     technologies: ['Python', 'PyTorch', 'CUDA'],
     problemType: 'runtime error',
-    summary: 'A training script crashing on a tensor shape mismatch, with a device-placement warning in the traceback.',
+    summary: 'A training script crashing on a tensor shape mismatch, with a device placement warning in the traceback.',
     searchQuery: 'PyTorch tensor shape mismatch CUDA device error during training',
     skillsNeeded: ['Machine learning'],
     difficulties: ['Tensor broadcasting', 'GPU memory'],
@@ -59,7 +59,7 @@ const DEMO_ANALYSES: VisionAnalysis[] = [
     summary: 'A query returning duplicate rows after a join, with an aggregate that looks correct but is silently wrong.',
     searchQuery: 'SQL Postgres join duplicates wrong aggregate result',
     skillsNeeded: ['Databases', 'Distributed systems'],
-    difficulties: ['Join fan-out', 'Aggregate semantics'],
+    difficulties: ['Join fan out', 'Aggregate semantics'],
     confidence: 0.74,
   },
   {
@@ -89,7 +89,7 @@ const DEMO_STANDUP_TRANSCRIPT =
   "Okay so this week I finished the schema file and got the first mutation working end to end. " +
   "I also wrote the migration and tested it locally. " +
   "Honestly the thing that's blocking me is the auth rules: I can't work out how to scope the query so a user only sees their own rows, " +
-  "and I keep second-guessing whether the check belongs on the client or the server. " +
+  "and I keep second guessing whether the check belongs on the client or the server. " +
   "Next I want to wire the first mutation into the UI, but I'd rather fix the auth thing first."
 
 export function demoStandup(): {
@@ -107,7 +107,7 @@ export function demoStandup(): {
       'Wrote and locally tested the migration.',
       'Blocked on auth rules: cannot scope a query so users only see their own rows.',
     ],
-    blocker: 'Unclear whether the ownership check belongs client- or server side when scoping queries.',
+    blocker: 'Unclear whether the ownership check belongs on the client or the server side when scoping queries.',
     completedStepTitles: ['Define the data model', 'Write the first mutation'],
     mood: 'focused but stuck',
     nextStep: 'Fix query scoping so a user only reads their own rows.',
@@ -122,11 +122,11 @@ export function demoMicroSteps(stepTitle: string): Array<{ title: string; detail
     },
     {
       title: `Write the smallest possible version of “${stepTitle}”`,
-      detail: 'Hard-code the inputs. The goal is a file that runs, not a file that is right.',
+      detail: 'Hard code the inputs. The goal is a file that runs, not a file that is right.',
     },
     {
       title: `Make one real call to “${stepTitle}” and log the result`,
-      detail: 'Swap the hard-coded input for one real value and console.log the output. If it throws, paste the error back here.',
+      detail: 'Swap the hard coded input for one real value and console.log the output. If it throws, paste the error back here.',
     },
   ]
 }
@@ -162,10 +162,10 @@ export function demoCodeReview(language: string, code: string): {
   const hasTodo = /TODO|FIXME/.test(code)
 
   const issues: Array<{ severity: string; issue: string; fix: string }> = []
-  if (hasSecret) issues.push({ severity: 'high', issue: 'A credential looks hard-coded.', fix: 'Move it to an environment variable / Worker secret and rotate the exposed value.' })
+  if (hasSecret) issues.push({ severity: 'high', issue: 'A credential looks hard coded.', fix: 'Move it to an environment variable / Worker secret and rotate the exposed value.' })
   if (!hasTry) issues.push({ severity: 'medium', issue: 'No error handling around the async path.', fix: `Wrap the await in a try/catch (or return a Result) so a rejection surfaces as a message, not a blank screen.` })
   if (!hasTests) issues.push({ severity: 'medium', issue: 'No test accompanies the change.', fix: 'Add one test for the happy path and one for the failure you just handled: that is what makes it reviewable.' })
-  if (hasTodo) issues.push({ severity: 'low', issue: 'A TODO is shipping in the submitted code.', fix: 'Either do it or open an issue; a TODO in proof-of-work reads as unfinished.' })
+  if (hasTodo) issues.push({ severity: 'low', issue: 'A TODO is shipping in the submitted code.', fix: 'Either do it or open an issue; a TODO in proof of work reads as unfinished.' })
   if (lines > 120) issues.push({ severity: 'low', issue: `The submission is long (${lines} lines).`, fix: 'Split it so a reviewer can read the change in one sitting.' })
 
   let score = 92
@@ -227,9 +227,9 @@ export function demoCareerPaths(seed: string, goalTitle: string): { paths: DemoC
         skillsGrow: ['Databases', 'APIs', 'Testing', 'Systems design'],
         projects: ['A REST API with an authenticated write path', 'A small CLI that calls a public API and stores results'],
         milestones: ['One deployed service with a database', 'One project with tests and a README', 'One codebase you have read end to end'],
-        effort: 'Estimate · roughly 3 to 6 months of part-time work',
+        effort: 'Estimate · roughly 3 to 6 months of part time work',
         assumptions: ['You are comfortable with at least one programming language', 'You have a few hours a week available'],
-        tradeoffs: ['Steeper theory ramp than product work', 'Interview-style data structures prep is a separate track'],
+        tradeoffs: ['Steeper theory ramp than product work', 'Interview style data structures prep is a separate track'],
         nextAction: 'Pick one existing project and add a real database read and write, then deploy it.',
       },
       {
@@ -239,7 +239,7 @@ export function demoCareerPaths(seed: string, goalTitle: string): { paths: DemoC
         skillsGrow: ['Statistics', 'Python data stack', 'Model evaluation'],
         projects: ['Reproduce one published result on a small dataset', 'A dashboard over a public dataset you cleaned yourself'],
         milestones: ['One notebook you can explain line by line', 'One model you evaluated honestly, including its failures'],
-        effort: 'Estimate · roughly 4 to 8 months of part-time work',
+        effort: 'Estimate · roughly 4 to 8 months of part time work',
         assumptions: ['You are willing to learn the maths alongside the code'],
         tradeoffs: ['Entry roles often ask for a postgraduate degree', 'Less immediate feedback than shipping an application'],
         nextAction: 'Take one small public dataset and answer one specific question about it, end to end.',
@@ -249,12 +249,12 @@ export function demoCareerPaths(seed: string, goalTitle: string): { paths: DemoC
         why: `Uses the communication side of “${focus}”: writing, prioritising and explaining: while staying close to engineering.`,
         skillsHave: ['Written communication'],
         skillsGrow: ['User research', 'Prioritisation frameworks', 'Prototyping'],
-        projects: ['A written product teardown of a tool you use daily', 'A clickable prototype with a one-page rationale'],
+        projects: ['A written product teardown of a tool you use daily', 'A clickable prototype with a one page rationale'],
         milestones: ['One teardown someone else found useful', 'One prototype tested with three real users'],
-        effort: 'Estimate · roughly 2 to 4 months of part-time work',
+        effort: 'Estimate · roughly 2 to 4 months of part time work',
         assumptions: ['You enjoy writing and talking to people as much as building'],
-        tradeoffs: ['Fewer entry-level openings than engineering', 'Portfolios matter more than coursework here'],
-        nextAction: 'Write a one-page teardown of a product you use, and share it with one person for feedback.',
+        tradeoffs: ['Fewer entry level openings than engineering', 'Portfolios matter more than coursework here'],
+        nextAction: 'Write a one page teardown of a product you use, and share it with one person for feedback.',
       },
     ],
   ]
@@ -287,7 +287,7 @@ export function demoRoadmap(goalTitle: string): {
         title: 'Close the first skill gap',
         why: 'One gap, closed properly, is worth more than five started.',
         tasks: [
-          { title: 'Pick the single highest-leverage gap', detail: 'Choose the one that blocks the most of your goal.', estimate: '30 minutes' },
+          { title: 'Pick the single highest leverage gap', detail: 'Choose the one that blocks the most of your goal.', estimate: '30 minutes' },
           { title: 'Build the smallest artifact that needs it', detail: 'A script, a page or a notebook that is impossible without that skill.', estimate: '3 to 5 hours' },
           { title: 'Write up what surprised you', detail: 'Three paragraphs. This is what you bring to a mentor session.', estimate: '1 hour' },
         ],
@@ -305,7 +305,7 @@ export function demoRoadmap(goalTitle: string): {
         why: 'The last 10% is what makes the rest legible to anyone reviewing you.',
         tasks: [
           { title: 'Write the README or summary', detail: 'Problem, approach, result, what you would do differently.', estimate: '1 to 2 hours' },
-          { title: 'Prepare a two-minute walkthrough', detail: 'Practise saying it out loud once.', estimate: '30 minutes' },
+          { title: 'Prepare a two minute walkthrough', detail: 'Practise saying it out loud once.', estimate: '30 minutes' },
         ],
       },
     ],

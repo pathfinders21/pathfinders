@@ -79,15 +79,15 @@ export const OnboardingFlow: React.FC<OnboardingFlowProps> = ({
         if (style === 'executive') {
           generated = `${title || 'Engineering Leader'} with ${experienceYears}+ years building resilient teams and products at ${company || 'tier 1 tech'}. I mentor upcoming talent in ${domainsText}, focusing on executive presence, strategic trade offs, and scaling systems from 0 to 10M+ users.`;
         } else if (style === 'technical') {
-          generated = `Deep-tech practitioner with ${experienceYears} years in ${domainsText}. My core expertise spans ${skillsText}. In my mentorship sessions, we avoid fluff: we review real architecture diagrams, profile bottlenecks, and master Staff level engineering judgment.`;
+          generated = `Deep tech practitioner with ${experienceYears} years in ${domainsText}. My core expertise spans ${skillsText}. In my mentorship sessions, we avoid fluff: we review real architecture diagrams, profile bottlenecks, and master Staff level engineering judgment.`;
         } else {
-          generated = `Passionate mentor dedicated to demystifying the path to Senior and Staff engineering in ${domainsText}. I partner with ambitious builders to turn daily execution into high-leverage promotion cases, rigorous RFCs, and lasting career momentum.`;
+          generated = `Passionate mentor dedicated to demystifying the path to Senior and Staff engineering in ${domainsText}. I partner with ambitious builders to turn daily execution into high leverage promotion cases, rigorous RFCs, and lasting career momentum.`;
         }
       } else {
         if (style === 'technical') {
-          generated = `${title || 'Software Engineer'} with ${experienceYears} years of experience specializing in ${domainsText}. Currently deepening my technical depth in ${skillsText}, with a target to transition into foundational distributed architectures and high-scale production systems.`;
+          generated = `${title || 'Software Engineer'} with ${experienceYears} years of experience specializing in ${domainsText}. Currently deepening my technical depth in ${skillsText}, with a target to transition into foundational distributed architectures and high scale production systems.`;
         } else if (style === 'executive') {
-          generated = `Focused on bridging rigorous engineering execution with high-level product strategy in ${domainsText}. Seeking mentorship from seasoned leaders to sharpen technical decision making, stakeholder alignment, and Staff+ roadmap formulation.`;
+          generated = `Focused on bridging rigorous engineering execution with high level product strategy in ${domainsText}. Seeking mentorship from seasoned leaders to sharpen technical decision making, stakeholder alignment, and Staff+ roadmap formulation.`;
         } else {
           generated = `Ambitious builder accelerating my trajectory across ${domainsText}. Looking for hands on, artifact driven guidance on ${skillsText} to break through career plateaus and deliver outsized organizational impact.`;
         }

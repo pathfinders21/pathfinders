@@ -209,7 +209,7 @@ export async function recommendMentors(
     excludedReasonText,
     note: goal
       ? `Ranked against your goal “${goal.title}” and your stored profile.`
-      : 'Ranked against your stored profile. Set a goal to sharpen the goal-alignment factor.',
+      : 'Ranked against your stored profile. Set a goal to sharpen the goal alignment factor.',
     weights: MATCH_WEIGHTS,
     weightsNote: WEIGHTS_NOTE,
     disclaimer: SCORE_DISCLAIMER,

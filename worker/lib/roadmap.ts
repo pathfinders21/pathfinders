@@ -875,7 +875,7 @@ export async function tickStalledSteps(env: AiEnvLike, userId: string, force = f
           detail: 'Skip tutorials. Write down the one API or rule you will actually use.',
         },
         {
-          title: `Hard-code the smallest version of “${step.title}”`,
+          title: `Hard code the smallest version of “${step.title}”`,
           detail: 'Fake the inputs. The goal is something that runs.',
         },
         {
@@ -904,7 +904,7 @@ export async function tickStalledSteps(env: AiEnvLike, userId: string, force = f
       userId,
       'roadmap_split',
       `Broke down “${step.title}”`,
-      `Untouched for three days, so the agent split it into ${micro.length} micro-steps.`,
+      `Untouched for three days, so the agent split it into ${micro.length} micro steps.`,
     )
     result.stalled.push({ stepId: step.id, title: step.title, microStepIds: ids })
   }

@@ -21,7 +21,7 @@ export function csrfVerdict(request: Request, appOrigin: string | undefined): Cs
     return { ok: false, status: 503, message: 'Auth is not configured (APP_ORIGIN is missing).' }
   }
   if (!isSameOriginRequest(request, appOrigin)) {
-    return { ok: false, status: 403, message: 'Cross-origin request rejected' }
+    return { ok: false, status: 403, message: 'Cross origin request rejected' }
   }
   return { ok: true }
 }

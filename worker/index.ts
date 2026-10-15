@@ -169,7 +169,7 @@ async function body<T>(request: Request, validator: (value: unknown, field: stri
   try {
     raw = await readJson<unknown>(request)
   } catch {
-    throw new InputError('body', 'expected a JSON body with content-type application/json')
+    throw new InputError('body', 'expected a JSON body with a content type of application/json')
   }
   return parseBody(validator, raw)
 }
@@ -381,7 +381,7 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
         return json({
           ok: true,
           ...profilePayload(saved),
-          warning: `Your account is already registered as a ${saved.role}. Roles are set once at sign-up.`,
+          warning: `Your account is already registered as a ${saved.role}. Roles are set once at sign up.`,
         })
       }
       return json({ ok: true, ...profilePayload(saved) })

@@ -194,7 +194,7 @@ export async function mentorPortfolio(db: D1Database, profile: Profile): Promise
     basis: [
       'Mentorships are counted from requests you accepted: nothing is recorded until you accept one.',
       'Milestones are the completed steps in the roadmap the student built for the goal you accepted.',
-      'Check-ins are progress updates the student logged themselves after you accepted.',
+      'Check ins are progress updates the student logged themselves after you accepted.',
       'No hours are logged, no badges are issued, and no certificate or credit is implied by any figure here.',
     ],
     declared: {

@@ -581,7 +581,7 @@ export async function runStandup(
     env.DB,
     userId,
     'standup',
-    `Voice standup · ${completed.length} step${completed.length === 1 ? '' : 's'} auto-completed`,
+    `Voice standup · ${completed.length} step${completed.length === 1 ? '' : 's'} auto completed`,
     parsed.summary[0] ?? parsed.transcript.slice(0, 120),
   )
 
@@ -692,8 +692,8 @@ export async function runCodeReview(
     'code_review',
     mentorNotified ? `Proof of Work passed (${review.score}%)` : `Proof of Work held back (${review.score}%)`,
     mentorNotified
-      ? 'AI pre-review done: the mentor was notified with a short brief.'
-      : 'AI pre-review flagged fixes before a mentor sees it.',
+      ?      'AI pre review done: the mentor was notified with a short brief.'
+      :      'AI pre review flagged fixes before a mentor sees it.',
   )
 
   return { engine, cached, ...review, mentorNotified }

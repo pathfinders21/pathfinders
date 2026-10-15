@@ -181,7 +181,7 @@ export const AssessmentPanel: React.FC<Props> = ({ session }) => {
           <h2 className="text-lg font-medium text-white">Sign in to run an assessment</h2>
           <p className="text-sm text-white/60">
             Analysis and roadmaps are stored against your account and are only readable by you, so this needs a
-            session. Nothing is generated from a browser-only identity.
+            session. Nothing is generated from an identity the browser invented.
           </p>
           <a
             href={signInHref('#/assess')}

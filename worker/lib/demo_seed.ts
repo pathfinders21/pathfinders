@@ -74,7 +74,7 @@ export const DEMO_MILESTONES: DemoMilestone[] = [
     dueInDays: -2,
     tasks: [
       { title: 'Generate 100k rows and time the slowest query', detail: '', estimate: '3h', dueInDays: -4 },
-      { title: 'Add the index and re-measure', detail: 'Record both timings in your own notes.', estimate: '2h', dueInDays: -1 },
+      { title: 'Add the index and measure again', detail: 'Record both timings in your own notes.', estimate: '2h', dueInDays: -1 },
     ],
   },
   {

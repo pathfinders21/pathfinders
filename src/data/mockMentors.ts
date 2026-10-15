@@ -33,7 +33,7 @@ export const INITIAL_MENTORS: Mentor[] = [
   },
   {
     id: 'm-3',
-    name: 'Amina Al-Mansoor',
+    name: 'Amina Al Mansoor',
     role: 'Principal Design Technologist',
     company: 'Figma',
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&auto=format&fit=crop&q=80',
@@ -139,12 +139,12 @@ export const INITIAL_ROADMAP: CareerRoadmap = {
       id: 'ms-3',
       phase: 'Phase 3: Fine Tuning & Distributed Execution',
       title: 'Parameter Efficient Fine Tuning (PEFT) & Pipeline Sharding',
-      description: 'Implement distributed training pipelines using Deepspeed ZeRO-3, FSDP, and LoRA/QLoRA on multi GPU setups without OOM failures.',
+      description: 'Implement distributed training pipelines using Deepspeed ZeRO stage 3, FSDP, and LoRA/QLoRA on multi GPU setups without OOM failures.',
       prerequisites: ['PyTorch dataset streaming pipelines', 'Gradient accumulation mechanics'],
       deliverable: 'Train a domain specialized 8 billion parameter model, evaluate perplexity, and publish a reproducible eval harness.',
       duration: '5 Weeks',
       completed: false,
-      resources: ['Deepspeed ZeRO-3 Documentation', 'Axolotl Configuration Guides', 'HuggingFace TRL Libraries'],
+      resources: ['Deepspeed ZeRO stage 3 Documentation', 'Axolotl Configuration Guides', 'HuggingFace TRL Libraries'],
       mentorCheckInTopic: 'Validate gradient checkpointing and loss curve anomalies with a senior AI researcher.',
     },
     {
