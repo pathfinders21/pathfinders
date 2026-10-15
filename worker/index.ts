@@ -20,6 +20,7 @@
  *   /api/messages*, /api/portfolio             accepted-pair messaging, mentor record
  *   /api/vision-match, /api/match, /api/standup, /api/code-review, /api/events
  *                                              the original AI features
+ *   /api/assistant/chat                        the assistant: an answer plus mentors
  *
  * Deploy target: Cloudflare Workers (see wrangler.toml). Bindings: DB (D1),
  * ASSETS (static build), AI_API_KEY (secret), FREEBUFF_CLIENT_ID /
@@ -100,6 +101,7 @@ import {
   type GoalStatus,
 } from './lib/roadmap'
 import { recommendMentors, saveSnapshot } from './lib/matching/index'
+import { CHAT_MAX_TURNS, askAssistant, type ChatTurn } from './lib/assistant'
 import {
   RequestError,
   createRequest,
@@ -114,6 +116,7 @@ import {
   boolean,
   raw,
   withDefault,
+  arrayOf,
   object,
   optional,
   parseBody,
@@ -961,6 +964,40 @@ async function handleApi(request: Request, env: Env, url: URL): Promise<Response
       object({ language: withDefault(string({ max: 40 }), 'code'), code: string({ max: MAX_CODE_CHARS }) }),
     )
     return json({ ok: true, ...(await runCodeReview(env, user.sub, input.language, input.code)) })
+  }
+
+  /* ---------------- the assistant ---------------- */
+
+  /**
+   * The chat. Identity is the session, the mentors come from the matching engine, and
+   * the transcript this call is allowed to see is capped: the client's scrollback is
+   * display state, not an instruction channel.
+   */
+  if (path === '/api/assistant/chat' && method === 'POST') {
+    const blocked = crossOrigin(request, env)
+    if (blocked) return blocked
+    const input = await body(
+      request,
+      object({
+        message: string({ min: 3, max: 2000 }),
+        history: optional(
+          arrayOf(
+            object({
+              role: string({ values: ['user', 'assistant'] }),
+              text: string({ min: 1, max: 2000 }),
+            }),
+            { max: CHAT_MAX_TURNS },
+          ),
+        ),
+      }),
+    )
+    await enforceActionLimit(env.DB, user.sub, 'assistant.chat')
+    const history: ChatTurn[] = (input.history ?? []).map((turn) => ({
+      role: turn.role === 'user' ? 'user' : 'assistant',
+      text: turn.text,
+    }))
+    const answer = await askAssistant(env, user.sub, profile, input.message, history)
+    return json({ ok: true, ...answer })
   }
 
   if (path === '/api/events' && method === 'GET') {

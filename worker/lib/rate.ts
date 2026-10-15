@@ -24,6 +24,9 @@ export const ACTION_LIMITS = {
   // table is not a dumping ground.
   'ai_feedback': { limit: 20, windowMs: 60 * 60 * 1000, label: 'AI feedback reports' },
   'agent.propose': { limit: 15, windowMs: 60 * 60 * 1000, label: 'agent proposals' },
+  // Assistant turns also carry their own metered model budget; this stops a tab left
+  // open in a loop from spending it faster than a person could type.
+  'assistant.chat': { limit: 30, windowMs: 60 * 60 * 1000, label: 'assistant messages' },
 } as const satisfies Record<string, ActionLimit>
 
 export type ActionKey = keyof typeof ACTION_LIMITS

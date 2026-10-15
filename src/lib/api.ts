@@ -482,6 +482,35 @@ export type MenteeView = MenteeBrief & {
   since: string
 }
 
+/* ---------------- the assistant ---------------- */
+
+/** One mentor as the chat shows them: the matching engine's ranking, not the model's. */
+export type AssistantMentor = {
+  id: string
+  name: string
+  headline: string
+  expertise: string[]
+  /** The engine's 0 to 100 fit score: a ranking signal, not a probability of success. */
+  score: number
+  /** The engine's own written reason, phrased by the model or by the app. */
+  summary: string
+}
+
+/** One earlier turn, so the assistant can follow a conversation. */
+export type AssistantTurn = { role: 'user' | 'assistant'; text: string }
+
+export type AssistantResponse = {
+  ok: true
+  reply: string
+  followUps: string[]
+  mentors: AssistantMentor[]
+  engine: Engine
+  cached: boolean
+  /** How many mentors the engine had to choose from, so an empty list can be explained. */
+  considered: number
+  note: string
+}
+
 export const api = {
   health: () => request<HealthResponse>('/api/health', { timeoutMs: 8000 }),
   profile: () => request<ProfileResponse>('/api/profile'),
@@ -504,6 +533,13 @@ export const api = {
   /** "Report a poor recommendation". Stored against the reporter; nothing else happens. */
   reportFeedback: (body: { feature: 'assessment' | 'agent' | 'match' | 'roadmap'; subject?: string; note?: string }) =>
     request<{ ok: true; recorded: boolean; note: string }>('/api/feedback', { method: 'POST', body }),
+
+  /**
+   * The assistant chat. The mentors in the reply are ranked by the matching engine
+   * before the model sees them, and the model may only pick from that list.
+   */
+  askAssistant: (body: { message: string; history?: AssistantTurn[] }) =>
+    request<AssistantResponse>('/api/assistant/chat', { method: 'POST', body, timeoutMs: 60_000 }),
 
   /* roadmap */
   roadmap: () => request<RoadmapView>('/api/roadmap'),

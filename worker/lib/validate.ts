@@ -112,6 +112,16 @@ export function object<S extends Record<string, Validator<unknown>>>(
   }
 }
 
+/** An array whose every item is validated by `item`. The count is capped. */
+export function arrayOf<T>(item: Validator<T>, opts: { max?: number } = {}): Validator<T[]> {
+  const max = opts.max ?? 20
+  return (value, field) => {
+    if (!Array.isArray(value)) throw new InputError(field, 'expected an array')
+    if (value.length > max) throw new InputError(field, `must have at most ${max} items`)
+    return value.map((entry, index) => item(entry, `${field}[${index}]`))
+  }
+}
+
 /** Reads the whole body through a validator, so a shape error reads as one message. */
 export function parseBody<T>(validator: Validator<T>, body: unknown): T {
   return validator(body, 'body')

@@ -569,3 +569,48 @@ export function demoAgentProposal(
     deadline: inAWeek,
   }
 }
+
+/**
+ * Deterministic answer for the assistant chat.
+ *
+ * Same contract as every other fallback here: derived from the input, stable across
+ * renders, and labelled `engine: 'demo'` by its caller. It answers the *shape* of the
+ * question (reduce it, run the smallest thing, then ask these people with this evidence)
+ * rather than pretending to know the person's codebase, and it names only mentors that
+ * the matching engine already put in front of it.
+ */
+export function demoAssistant(input: {
+  message: string
+  goalTitle: string | null
+  skillsHave: string[]
+  skillsWant: string[]
+  mentors: Array<{ name: string; expertise: string[] }>
+}): { reply: string; followUps: string[] } {
+  const asked = input.message.trim().replace(/\s+/g, ' ').replace(/[.?!]+$/, '')
+  const short = asked.length > 140 ? `${asked.slice(0, 137)}...` : asked
+  const next = input.skillsWant[0] ?? null
+  const first = input.mentors[0]
+  const second = input.mentors[1]
+
+  const paragraphs = [
+    `You asked: "${short}". This is the demo engine answering, because no model key is configured on this server, so treat it as a way to organise the question rather than an answer about your code.`,
+    input.goalTitle
+      ? `Against your stored goal ("${input.goalTitle}") the shortest path is to reduce this to one thing you can run today${next ? `, which for you is ${next}` : ''}. Write down what you expect first, run it, and keep the output: that turns three rounds of questions with a mentor into one.`
+      : 'You have no active goal stored yet, so start there. The same question has different right answers depending on where you are trying to get to.',
+    input.skillsHave.length
+      ? `You already list ${input.skillsHave.slice(0, 4).join(', ')}, so build the smallest version on top of what you have rather than starting from a tutorial.`
+      : 'Nothing is listed under what you can already do yet, so the first move is a small piece of work you can keep, however plain.',
+    first
+      ? `Who to ask: ${first.name}${first.expertise.length ? ` (${first.expertise.slice(0, 3).join(', ')})` : ''}${second ? `, or ${second.name}` : ''}. Bring the smallest reproduction, what you already tried, and the output you got.`
+      : 'Nobody in the directory covers this yet, so put it on the community board where mentors filter open problems.',
+  ]
+
+  return {
+    reply: paragraphs.join('\n\n'),
+    followUps: [
+      'What is the smallest command or request that reproduces this?',
+      next ? `What have you already tried for ${next}?` : 'What have you already tried?',
+      'What would a good result look like, specifically?',
+    ],
+  }
+}
