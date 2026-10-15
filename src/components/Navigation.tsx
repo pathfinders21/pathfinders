@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Menu, X, Compass, User, LogOut } from 'lucide-react';
+import { Menu, X, Compass, User, LogOut, Sparkles } from 'lucide-react';
 import { UserProfile } from '../types.ts';
 
 interface NavigationProps {
@@ -59,7 +59,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden lg:flex items-center gap-8">
           {navLinks.map((link) => {
             const isActive = currentTab === link.id;
             return (
@@ -80,7 +80,23 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Desktop CTA & User State */}
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden lg:flex items-center gap-4">
+          {/* The assistant has a screen of its own, so it gets its own way in rather than
+              being buried under the CTA. */}
+          <button
+            type="button"
+            onClick={() => onSelectTab('assistant')}
+            aria-current={currentTab === 'assistant' ? 'page' : undefined}
+            className={`inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 ${
+              currentTab === 'assistant'
+                ? 'bg-white/15 text-white font-medium'
+                : 'text-white/75 hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Sparkles className="w-4 h-4" />
+            <span>Ask AI</span>
+          </button>
+
           {user ? (
             <div className="flex items-center gap-3">
               <button
@@ -120,7 +136,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* Mobile Hamburger Button */}
-        <div className="md:hidden flex items-center gap-2">
+        <div className="lg:hidden flex items-center gap-2">
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -135,7 +151,7 @@ export const Navigation: React.FC<NavigationProps> = ({
 
       {/* Accessible Mobile Menu Overlay */}
       {mobileMenuOpen && (
-        <div className="md:hidden px-6 pt-2 pb-6 border-t border-white/10 bg-[#002244]/95 backdrop-blur-xl animate-fade-rise">
+        <div className="lg:hidden px-6 pt-2 pb-6 border-t border-white/10 bg-[#002244]/95 backdrop-blur-xl animate-fade-rise">
           <div className="flex flex-col gap-3 py-3">
             {navLinks.map((link) => (
               <button
@@ -154,6 +170,22 @@ export const Navigation: React.FC<NavigationProps> = ({
                 {link.label}
               </button>
             ))}
+            <button
+              type="button"
+              onClick={() => {
+                onSelectTab('assistant');
+                setMobileMenuOpen(false);
+              }}
+              aria-current={currentTab === 'assistant' ? 'page' : undefined}
+              className={`text-left py-2.5 px-3 rounded-md text-base transition-colors flex items-center gap-2 ${
+                currentTab === 'assistant'
+                  ? 'text-white bg-white/10 font-medium'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Ask AI</span>
+            </button>
           </div>
 
           <div className="pt-4 border-t border-white/10 flex flex-col gap-3">

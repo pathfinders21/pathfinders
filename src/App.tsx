@@ -21,6 +21,7 @@ import { MatchPanel } from './components/MatchPanel.tsx';
 import { StudentWorkspace } from './components/StudentWorkspace.tsx';
 import { MentorInbox } from './components/MentorInbox.tsx';
 import { AssistantDock } from './components/AssistantDock.tsx';
+import { AssistantScreen } from './components/AssistantScreen.tsx';
 import { useSession } from './lib/session.ts';
 import { ApiError, api, type AssistantMentor } from './lib/api.ts';
 import { INITIAL_MENTORS, INITIAL_REQUESTS, INITIAL_ROADMAP } from './data/mockMentors.ts';
@@ -350,6 +351,11 @@ export default function App() {
    * there is no account to store it against, so it sends the visitor to sign in instead
    * of pretending a request was made.
    */
+  const openMentorsDirectory = () => {
+    setCurrentTab('mentors');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleAssistantRequestMentor = async (mentor: AssistantMentor, topic: string) => {
     if (!live) {
       addToast('info', 'Sign in to request mentorship', 'Requests are stored against your account, so they need a session.');
@@ -553,6 +559,11 @@ export default function App() {
 
         {currentTab === 'agent' && <AgentPanel session={session} />}
 
+        {/* The assistant, as a screen of its own. Also opens in the dock below. */}
+        {currentTab === 'assistant' && (
+          <AssistantScreen session={session} onRequestMentor={handleAssistantRequestMentor} onBrowseMentors={openMentorsDirectory} />
+        )}
+
         {/* Community Problem Salons: Mentees post problems, mentors filter and solve */}
         {currentTab === 'community' && (
           <CommunityProblemBoard
@@ -668,15 +679,15 @@ export default function App() {
         onRequireAuth={() => setAuthModalOpen(true)}
       />
 
-      {/* The assistant: a question in, an answer and the mentors who fit it out. */}
-      <AssistantDock
-        session={session}
-        onRequestMentor={handleAssistantRequestMentor}
-        onBrowseMentors={() => {
-          setCurrentTab('mentors');
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }}
-      />
+      {/* The assistant, as a floating chat. Hidden on its own screen so there is never a
+          chat inside a chat. */}
+      {currentTab !== 'assistant' && (
+        <AssistantDock
+          session={session}
+          onRequestMentor={handleAssistantRequestMentor}
+          onBrowseMentors={openMentorsDirectory}
+        />
+      )}
 
       {/* Multimedia Chat Drawer with Video, Photos & Voice Notes */}
       {activeChat && (

@@ -97,6 +97,24 @@ describe('App routing', () => {
     expect(screen.getByText(/CTA Rule State/i)).toBeTruthy();
   });
 
+  it('gives the assistant a screen of its own, reached from the navigation', () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /ask ai/i }));
+
+    expect(window.location.hash).toBe('#/assistant');
+    expect(screen.getByRole('heading', { level: 1, name: /stuck\? describe it/i })).toBeTruthy();
+    // The floating chat is hidden on its own screen: never a chat inside a chat.
+    expect(screen.queryByRole('button', { name: /^ask the assistant$/i })).toBeNull();
+    expect(screen.queryByRole('dialog', { name: /assistant/i })).toBeNull();
+  });
+
+  it('deep links straight onto the assistant', () => {
+    goTo('#/assistant');
+    render(<App />);
+    expect(screen.getByRole('heading', { level: 1, name: /stuck\? describe it/i })).toBeTruthy();
+  });
+
   it('lets the author take their own community post back off the board', () => {
     // Signed in, because only the person who wrote a post may remove it.
     localStorage.setItem(
