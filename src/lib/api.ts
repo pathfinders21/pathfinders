@@ -120,7 +120,24 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
     payload = null
   }
 
-  if (response.ok) return (payload ?? {}) as T
+  //
+  // A 200 that is not JSON is not this API answering. A static host with a single page
+  // app fallback answers `/api/profile` with index.html and a 200, and treating that as
+  // success handed callers an empty object, which is what made a signed in screen read a
+  // profile that was never there. Anything that answered with a body this code cannot
+  // parse is reported as a server failure, so the callers fall back to their labelled
+  // sample data instead of drawing from nothing.
+  //
+  if (response.ok) {
+    if (text && payload === null) {
+      throw new ApiError({
+        kind: 'server',
+        status: response.status,
+        message: 'The server sent a response this application could not read. Nothing was saved.',
+      })
+    }
+    return (payload ?? {}) as T
+  }
 
   // The server writes these messages to be read by the person who hit the error.
   const message =

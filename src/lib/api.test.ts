@@ -85,4 +85,22 @@ describe('api client', () => {
     expect(JSON.stringify(calls[0]!.init?.body ?? '')).toBe('""')
     expect(result.profile.userId).toBe('someone-else')
   })
+
+  it('refuses to read a static host fallback as an answer', async () => {
+    // A static host with a single page fallback answers `/api/profile` with the site
+    // itself and a 200. Reading that as success handed the screens a record whose every
+    // collection was undefined, and the first screen that called `.filter` on one of them
+    // took the whole app down to a blank page. A 200 that is not JSON is a server
+    // failure, so the callers fall back to their labelled sample data instead.
+    vi.stubGlobal('fetch', async () =>
+      new Response('<!doctype html><html><body><div id="root"></div></body></html>', {
+        status: 200,
+        headers: { 'content-type': 'text/html; charset=utf-8' },
+      }),
+    )
+    const error = (await request('/api/profile').catch((e) => e as ApiError)) as ApiError
+    expect(error).toBeInstanceOf(ApiError)
+    expect(error.kind).toBe('server')
+    expect(error.userMessage).toMatch(/could not read/i)
+  })
 })

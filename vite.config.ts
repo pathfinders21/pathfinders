@@ -23,41 +23,12 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Manual chunk splitting for better caching and lazy loading
+        // Only what this app actually ships is named here. The template listed packages
+        // this application does not use (convex, radix, framer-motion, recharts, forms),
+        // which made the build emit empty stub chunks that the deployed page still
+        // preloaded.
         manualChunks: {
-          // Vendor chunks for large libraries
-          'react-vendor': ['react', 'react-dom', 'react-router'],
-          'convex-vendor': ['convex'],
-          // Large UI library chunks
-          'radix-ui': [
-            '@radix-ui/react-accordion',
-            '@radix-ui/react-alert-dialog',
-            '@radix-ui/react-avatar',
-            '@radix-ui/react-checkbox',
-            '@radix-ui/react-collapsible',
-            '@radix-ui/react-context-menu',
-            '@radix-ui/react-dialog',
-            '@radix-ui/react-dropdown-menu',
-            '@radix-ui/react-hover-card',
-            '@radix-ui/react-label',
-            '@radix-ui/react-menubar',
-            '@radix-ui/react-navigation-menu',
-            '@radix-ui/react-popover',
-            '@radix-ui/react-progress',
-            '@radix-ui/react-radio-group',
-            '@radix-ui/react-scroll-area',
-            '@radix-ui/react-select',
-            '@radix-ui/react-separator',
-            '@radix-ui/react-slider',
-            '@radix-ui/react-switch',
-            '@radix-ui/react-tabs',
-            '@radix-ui/react-toggle',
-            '@radix-ui/react-toggle-group',
-            '@radix-ui/react-tooltip',
-          ],
-          // Heavy optional libraries - separate chunks for better lazy loading
-          'framer-motion': ['framer-motion'],
-          'charts': ['recharts'],
-          'forms': ['react-hook-form', '@hookform/resolvers', 'zod'],
+          'react-vendor': ['react', 'react-dom'],
         },
         // Optimize chunk size
         chunkFileNames: 'assets/[name]-[hash].js',
@@ -82,9 +53,7 @@ export default defineConfig({
       'react/jsx-runtime',
       'react-dom',
       'react-dom/client',
-      'react-router',
-      '@convex-dev/auth/react',
-      'framer-motion',
+      'lucide-react',
       // vlyPlugin() injects this import at serve time, so the dep scanner
       // never sees it. Without it here the first page load discovers it,
       // re-optimizes and full-reloads the preview mid-screenshot.
