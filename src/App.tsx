@@ -297,6 +297,7 @@ export default function App() {
           const isUserMentor = user?.role === 'mentor';
           const newResponse = {
             id: `resp-${Date.now()}`,
+            authorId: user?.id,
             authorName: user ? user.name : 'Taylor Morgan',
             authorRole: user?.title || (isUserMentor ? 'Industry Mentor' : 'Software Engineer'),
             authorAvatar:
@@ -316,6 +317,27 @@ export default function App() {
       })
     );
     addToast('success', 'Solution Submitted', 'Your guidance was published to the problem discussion.');
+  };
+
+  //
+  // Taking your own writing off the board. The board only ever offers these controls on
+  // rows this browser wrote, and it decides that by author id rather than by name, so a
+  // sample post that happens to carry your name is not yours to delete.
+  //
+  const handleDeleteProblem = (problemId: string) => {
+    setProblems((prev) => prev.filter((prob) => prob.id !== problemId));
+    addToast('info', 'Post deleted', 'It is gone from this browser. Nothing was sent to a server.');
+  };
+
+  const handleDeleteProblemResponse = (problemId: string, responseId: string) => {
+    setProblems((prev) =>
+      prev.map((prob) =>
+        prob.id === problemId
+          ? { ...prob, responses: prob.responses.filter((resp) => resp.id !== responseId) }
+          : prob
+      )
+    );
+    addToast('info', 'Answer deleted', 'It is gone from this browser. Nothing was sent to a server.');
   };
 
   const handleMarkProblemSolved = (problemId: string) => {
@@ -508,6 +530,8 @@ export default function App() {
             onPostProblem={handlePostProblem}
             onAddResponse={handleAddProblemResponse}
             onMarkSolved={handleMarkProblemSolved}
+            onDeleteProblem={handleDeleteProblem}
+            onDeleteResponse={handleDeleteProblemResponse}
             onRequireAuth={() => setAuthModalOpen(true)}
           />
         )}

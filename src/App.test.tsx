@@ -96,4 +96,45 @@ describe('App routing', () => {
     render(<App />);
     expect(screen.getByText(/CTA Rule State/i)).toBeTruthy();
   });
+
+  it('lets the author take their own community post back off the board', () => {
+    // Signed in, because only the person who wrote a post may remove it.
+    localStorage.setItem(
+      'pathfinders_user',
+      JSON.stringify({
+        id: 'u-rae',
+        name: 'Rae Okafor',
+        email: 'rae@example.com',
+        avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80',
+        role: 'mentee',
+        isOnboarded: true,
+      }),
+    );
+    goTo('#/community');
+    render(<App />);
+
+    fireEvent.click(screen.getByRole('button', { name: /post a problem/i }));
+    fireEvent.change(screen.getByPlaceholderText(/Distributed KV cache OOM/i), {
+      target: { value: 'Retries duplicate a charge' },
+    });
+    fireEvent.change(screen.getByPlaceholderText(/Explain the setup/i), {
+      target: { value: 'Our worker retries a failed charge and the customer is billed twice.' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /publish challenge/i }));
+
+    expect(screen.getByText('Retries duplicate a charge')).toBeTruthy();
+
+    // It is theirs, so it is offered, it asks once, and then it is gone.
+    fireEvent.click(screen.getByRole('button', { name: /^Delete your post: Retries duplicate a charge$/ }));
+    expect(screen.getByText('Retries duplicate a charge')).toBeTruthy();
+    fireEvent.click(
+      screen.getByRole('button', { name: /^Confirm deleting your post: Retries duplicate a charge$/ }),
+    );
+
+    expect(screen.queryByText('Retries duplicate a charge')).toBeNull();
+    // Gone from what this browser stored, not only from the screen.
+    expect(localStorage.getItem('pathfinders_community_problems') ?? '').not.toContain(
+      'Retries duplicate a charge',
+    );
+  });
 });

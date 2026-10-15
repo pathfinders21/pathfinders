@@ -15,6 +15,7 @@ import {
   AlertCircle,
   HelpCircle,
   ArrowRight,
+  Trash2,
 } from 'lucide-react';
 import { CommunityProblem, ProblemResponse, UserProfile } from '../types.ts';
 
@@ -24,6 +25,9 @@ interface CommunityProblemBoardProps {
   onPostProblem: (problem: Omit<CommunityProblem, 'id' | 'createdAt' | 'responses'>) => void;
   onAddResponse: (problemId: string, content: string) => void;
   onMarkSolved: (problemId: string, responseId?: string) => void;
+  /** Both only ever reachable on a row this browser wrote. */
+  onDeleteProblem: (problemId: string) => void;
+  onDeleteResponse: (problemId: string, responseId: string) => void;
   onRequireAuth: () => void;
   onRequestMentorship?: (authorName: string, domain: string) => void;
 }
@@ -43,6 +47,8 @@ export const CommunityProblemBoard: React.FC<CommunityProblemBoardProps> = ({
   onPostProblem,
   onAddResponse,
   onMarkSolved,
+  onDeleteProblem,
+  onDeleteResponse,
   onRequireAuth,
   onRequestMentorship,
 }) => {
@@ -60,6 +66,18 @@ export const CommunityProblemBoard: React.FC<CommunityProblemBoardProps> = ({
 
   // Inline Response Input state (problemId -> text)
   const [replyTexts, setReplyTexts] = useState<Record<string, string>>({});
+
+  // The one delete waiting for a second press, so nothing disappears on a stray click.
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
+
+  //
+  // Ownership is decided by account id, never by display name: a bundled sample post that
+  // happens to carry the signed in person's name is not theirs, and a signed out visitor
+  // owns nothing here.
+  //
+  const isMine = (authorId?: string) => !!currentUser && !!authorId && authorId === currentUser.id;
+  const postKey = (problemId: string) => `post:${problemId}`;
+  const answerKey = (problemId: string, responseId: string) => `answer:${problemId}:${responseId}`;
 
   const filteredProblems = problems.filter((prob) => {
     const matchesStatus =
@@ -316,6 +334,43 @@ export const CommunityProblemBoard: React.FC<CommunityProblemBoardProps> = ({
                   </button>
 
                   <div className="flex items-center gap-2">
+                    {/* Your own post can be taken down; nobody else's. */}
+                    {isMine(problem.authorId) &&
+                      (pendingDelete === postKey(problem.id) ? (
+                        <span className="flex items-center gap-1.5">
+                          <span className="text-[11px] text-rose-200/80">Delete this post?</span>
+                          <button
+                            type="button"
+                            aria-label={`Confirm deleting your post: ${problem.title}`}
+                            onClick={() => {
+                              setPendingDelete(null);
+                              onDeleteProblem(problem.id);
+                            }}
+                            className="px-2.5 py-1 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/30 text-rose-200 text-xs font-medium transition-colors cursor-pointer"
+                          >
+                            Yes, delete
+                          </button>
+                          <button
+                            type="button"
+                            aria-label={`Keep your post: ${problem.title}`}
+                            onClick={() => setPendingDelete(null)}
+                            className="px-2.5 py-1 rounded-lg text-white/60 hover:text-white text-xs transition-colors cursor-pointer"
+                          >
+                            Keep
+                          </button>
+                        </span>
+                      ) : (
+                        <button
+                          type="button"
+                          aria-label={`Delete your post: ${problem.title}`}
+                          onClick={() => setPendingDelete(postKey(problem.id))}
+                          className="px-3 py-1 rounded-lg bg-white/5 hover:bg-rose-500/15 border border-white/10 hover:border-rose-500/30 text-white/50 hover:text-rose-200 text-xs font-medium transition-colors flex items-center gap-1 cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Delete</span>
+                        </button>
+                      ))}
+
                     {/* Mentor action: Mark as Solved toggle */}
                     {problem.status === 'open' && (
                       <button
@@ -383,6 +438,41 @@ export const CommunityProblemBoard: React.FC<CommunityProblemBoardProps> = ({
                                   </span>
                                 )}
                                 <span className="text-[10px] text-white/40">{resp.createdAt}</span>
+
+                                {/* Your own answer can be withdrawn; someone else's cannot. */}
+                                {isMine(resp.authorId) &&
+                                  (pendingDelete === answerKey(problem.id, resp.id) ? (
+                                    <span className="flex items-center gap-1.5">
+                                      <button
+                                        type="button"
+                                        aria-label={`Confirm deleting your answer on ${problem.title}`}
+                                        onClick={() => {
+                                          setPendingDelete(null);
+                                          onDeleteResponse(problem.id, resp.id);
+                                        }}
+                                        className="text-[10px] px-2 py-0.5 rounded bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/30 text-rose-200 font-medium transition-colors cursor-pointer"
+                                      >
+                                        Delete
+                                      </button>
+                                      <button
+                                        type="button"
+                                        aria-label={`Keep your answer on ${problem.title}`}
+                                        onClick={() => setPendingDelete(null)}
+                                        className="text-[10px] text-white/50 hover:text-white transition-colors cursor-pointer"
+                                      >
+                                        Keep
+                                      </button>
+                                    </span>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      aria-label={`Delete your answer on ${problem.title}`}
+                                      onClick={() => setPendingDelete(answerKey(problem.id, resp.id))}
+                                      className="text-white/40 hover:text-rose-200 transition-colors cursor-pointer"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  ))}
                               </div>
                             </div>
 

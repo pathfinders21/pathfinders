@@ -92,6 +92,11 @@ export interface ChatMessage {
 
 export interface ProblemResponse {
   id: string;
+  /**
+   * Who wrote it, so the board can offer a delete to that person and nobody else. Absent
+   * on the bundled sample answers, which belong to nobody using this browser.
+   */
+  authorId?: string;
   authorName: string;
   authorRole: string;
   authorAvatar: string;
