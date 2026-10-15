@@ -184,7 +184,11 @@ export const ChatDrawer: React.FC<ChatDrawerProps> = ({
       );
       localStorage.setItem(`pathfinders_chat_${channelId}`, JSON.stringify(persisted));
     } catch {}
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    // Guarded: a missing or non-element ref must never break sending a message.
+    const end = messagesEndRef.current;
+    if (end && typeof end.scrollIntoView === 'function') {
+      end.scrollIntoView({ behavior: 'smooth' });
+    }
   }, [messages, channelId, isTyping]);
 
   // Voice recording timer

@@ -232,6 +232,30 @@ export const AgentPanel: React.FC<Props> = ({ session }) => {
     }
   };
 
+  /*
+   * Without a reachable API the agent has nothing to read and no button can work, so it
+   * says that rather than rendering an empty panel with a dead control. This mirrors the
+   * assessment screen's state, and it keeps the dashboard honest in a build whose backend
+   * is not running instead of looking broken.
+   */
+  if (session.status === 'error') {
+    return (
+      <Shell>
+        <div className="p-5 rounded-2xl bg-amber-950/40 border border-amber-500/30 text-amber-100 text-sm space-y-3">
+          <div className="flex items-center gap-2 font-medium">
+            <AlertTriangle className="w-4 h-4" />
+            <span>The backend is not answering</span>
+          </div>
+          <p className="text-xs text-amber-100/80">{session.error.userMessage}</p>
+          <p className="text-xs text-amber-100/60">
+            The agent reads your stored roadmap on the server and writes only what you approve, so it needs the API
+            running. Nothing here is simulated in its place.
+          </p>
+        </div>
+      </Shell>
+    );
+  }
+
   if (session.status === 'signed_out') {
     return (
       <Shell>
